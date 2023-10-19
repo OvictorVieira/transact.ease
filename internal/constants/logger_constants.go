@@ -5,6 +5,7 @@ const (
 	LoggerCategoryConfig    = "config"
 	LoggerCategoryMigration = "migration"
 	LoggerCategoryDatabase  = "database"
+	LoggerCategorySeeder    = "seed"
 
 	LoggerFile = "file"
 )
