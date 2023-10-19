@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: postgres_instance
+    environment:
+      POSTGRES_DB: transact_ease
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - dbnetwork
+
+networks:
+  dbnetwork:
+    driver: bridge
