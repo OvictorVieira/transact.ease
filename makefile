@@ -6,3 +6,6 @@ migrate-up:
 
 migrate-down:
 	go run cmd/migration/main.go -down
+
+seed:
+	go run cmd/seed/main.go
