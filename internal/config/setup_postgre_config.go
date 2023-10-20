@@ -9,6 +9,8 @@ import (
 func SetupPostgresConnection() (*sqlx.DB, error) {
 	var dsn string
 	switch AppConfig.Environment {
+	case constants.EnvironmentTest:
+		dsn = AppConfig.DBPostgreDsnTest
 	case constants.EnvironmentDevelopment:
 		dsn = AppConfig.DBPostgreDsn
 	case constants.EnvironmentProduction:

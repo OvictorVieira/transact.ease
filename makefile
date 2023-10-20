@@ -9,3 +9,6 @@ migrate-down:
 
 seed:
 	go run cmd/seed/main.go
+
+run-tests:
+	ENVIRONMENT=test go test ./...
