@@ -3,7 +3,7 @@ package accounts
 import (
 	Controller "github.com/OvictorVieira/transact.ease/internal/controllers/accounts"
 	Repository "github.com/OvictorVieira/transact.ease/internal/repositories"
-	Usecase "github.com/OvictorVieira/transact.ease/internal/usecases/accounts"
+	Usecase "github.com/OvictorVieira/transact.ease/internal/usecases"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 )

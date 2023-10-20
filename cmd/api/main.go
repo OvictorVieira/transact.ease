@@ -5,9 +5,8 @@ import (
 	"github.com/OvictorVieira/transact.ease/internal/config"
 	"github.com/OvictorVieira/transact.ease/internal/constants"
 	"github.com/OvictorVieira/transact.ease/pkg/logger"
-	"runtime"
-
 	"github.com/sirupsen/logrus"
+	"runtime"
 )
 
 func init() {
