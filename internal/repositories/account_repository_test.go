@@ -3,12 +3,12 @@ package repositories
 import (
 	"context"
 	"errors"
+	Mocks "github.com/OvictorVieira/transact.ease/internal/mocks"
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/mock"
 	"testing"
 
 	Domain "github.com/OvictorVieira/transact.ease/internal/domains/accounts"
-	Mocks "github.com/OvictorVieira/transact.ease/internal/mocks/accounts"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -59,6 +59,27 @@ func TestGetByDocumentNumberAndReturnData(t *testing.T) {
 	mockDB.On("GetContext", mock.Anything, mock.Anything, mock.Anything, accountDto.DocumentNumber).Return(nil)
 
 	actualAccount, err := repo.GetByDocumentNumber(context.TODO(), accountDto)
+
+	assert.NoError(t, err)
+	assert.Equal(t, expectedAccount, actualAccount)
+	mockDB.AssertExpectations(t)
+}
+
+func TestGetByIdReturnData(t *testing.T) {
+	mockDB := new(Mocks.MockDatabase)
+	repo := NewAccountRepository(mockDB)
+
+	accountDto := &Domain.AccountDto{
+		ID: 1,
+	}
+
+	expectedAccount := Domain.AccountDto{
+		ID: 1,
+	}
+
+	mockDB.On("GetContext", mock.Anything, mock.Anything, mock.Anything, accountDto.ID).Return(nil)
+
+	actualAccount, err := repo.GetById(context.TODO(), accountDto)
 
 	assert.NoError(t, err)
 	assert.Equal(t, expectedAccount, actualAccount)

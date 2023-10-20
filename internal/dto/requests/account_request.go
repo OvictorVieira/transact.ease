@@ -8,8 +8,14 @@ type AccountCreationRequest struct {
 	DocumentNumber string `json:"document_number" validate:"required"`
 }
 
-func (u *AccountCreationRequest) ToAccountDto() *Domain.AccountDto {
+func (a *AccountCreationRequest) ToAccountDto() *Domain.AccountDto {
 	return &Domain.AccountDto{
-		DocumentNumber: u.DocumentNumber,
+		DocumentNumber: a.DocumentNumber,
+	}
+}
+
+func BuildAccountDtoToFind(accountId string) *Domain.AccountDto {
+	return &Domain.AccountDto{
+		DocumentNumber: accountId,
 	}
 }

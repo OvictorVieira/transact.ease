@@ -42,3 +42,15 @@ func (ac AccountController) ProcessAccountCreation(ctx *gin.Context) {
 
 	Controllers.NewSuccessResponse(ctx, statusCode, constants.AccountCreatedWithSuccess, responses.FromAccountDto(accountDto))
 }
+
+func (ac AccountController) GetById(ctx *gin.Context) {
+	accountId := ctx.Param("accountId")
+
+	accountDto, statusCode, err := ac.usecase.GetById(ctx.Request.Context(), Request.BuildAccountDtoToFind(accountId))
+	if err != nil {
+		Controllers.NewErrorResponse(ctx, statusCode, err.Error())
+		return
+	}
+
+	Controllers.NewSuccessResponse(ctx, statusCode, constants.AccountCreatedWithSuccess, responses.FromAccountDto(accountDto))
+}
