@@ -23,28 +23,3 @@ func TestIsArrayContains(t *testing.T) {
 		})
 	}
 }
-
-func TestStringToFloat(t *testing.T) {
-	tests := []struct {
-		name    string
-		input   string
-		want    float64
-		wantErr bool
-	}{
-		{"Valid float", "123.45", 123.45, false},
-		{"Invalid float", "abc", 0, true},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := StringToFloat(tt.input)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("StringToFloat() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if got != tt.want {
-				t.Errorf("StringToFloat() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}

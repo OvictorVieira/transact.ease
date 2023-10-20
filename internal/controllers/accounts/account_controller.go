@@ -9,6 +9,7 @@ import (
 	"github.com/OvictorVieira/transact.ease/pkg/validators"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 type AccountController struct {
@@ -46,7 +47,14 @@ func (ac AccountController) ProcessAccountCreation(ctx *gin.Context) {
 func (ac AccountController) GetById(ctx *gin.Context) {
 	accountId := ctx.Param("accountId")
 
-	accountDto, statusCode, err := ac.usecase.GetById(ctx.Request.Context(), Request.BuildAccountDtoToFind(accountId))
+	convertedAccountId, err := strconv.Atoi(accountId)
+
+	if err != nil {
+		Controllers.NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	accountDto, statusCode, err := ac.usecase.GetById(ctx.Request.Context(), Request.BuildAccountDtoToFind(convertedAccountId))
 	if err != nil {
 		Controllers.NewErrorResponse(ctx, statusCode, err.Error())
 		return

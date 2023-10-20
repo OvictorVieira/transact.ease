@@ -14,8 +14,8 @@ func (a *AccountCreationRequest) ToAccountDto() *Domain.AccountDto {
 	}
 }
 
-func BuildAccountDtoToFind(accountId string) *Domain.AccountDto {
+func BuildAccountDtoToFind(accountId int) *Domain.AccountDto {
 	return &Domain.AccountDto{
-		DocumentNumber: accountId,
+		ID: accountId,
 	}
 }
