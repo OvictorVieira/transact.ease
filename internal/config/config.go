@@ -44,10 +44,6 @@ func InitializeAppConfig() error {
 	}
 
 	switch AppConfig.Environment {
-	case constants.EnvironmentTest:
-		if AppConfig.DBPostgreDsnTest == "" {
-			return constants.ErrEmptyVar
-		}
 	case constants.EnvironmentDevelopment:
 		if AppConfig.DBPostgreDsn == "" {
 			return constants.ErrEmptyVar
