@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS transact_ease.operations_types;
+DROP TABLE IF EXISTS transact_ease.operations_types ON CASCADE;
