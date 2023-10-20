@@ -3,6 +3,7 @@ package accounts
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"github.com/OvictorVieira/transact.ease/internal/constants"
 	Domain "github.com/OvictorVieira/transact.ease/internal/domains/accounts"
 	Mocks "github.com/OvictorVieira/transact.ease/internal/mocks/accounts"
@@ -124,4 +125,45 @@ func TestProcessAccountCreationWithInternalServerError(t *testing.T) {
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusInternalServerError, w.Code)
+}
+
+func TestGetByIdSuccess(t *testing.T) {
+	mockUsecase := new(Mocks.MockAccountUsecase)
+	controller := NewAccountController(mockUsecase)
+
+	accountDto := &Domain.AccountDto{
+		DocumentNumber: "123456789",
+	}
+
+	mockUsecase.On("GetById", mock.Anything, mock.Anything).Return(*accountDto, http.StatusOK, nil).Once()
+
+	r := gin.Default()
+	r.GET("/accounts/:accountId", controller.GetById)
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/accounts/123", nil)
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Contains(t, w.Body.String(), "123456789")
+
+	mockUsecase.AssertExpectations(t)
+}
+
+func TestGetByIdError(t *testing.T) {
+	mockUsecase := new(Mocks.MockAccountUsecase)
+	controller := NewAccountController(mockUsecase)
+
+	mockUsecase.On("GetById", mock.Anything, mock.Anything).Return(Domain.AccountDto{}, http.StatusInternalServerError, errors.New("error")).Once()
+
+	r := gin.Default()
+	r.GET("/accounts/:accountId", controller.GetById)
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/accounts/123", nil)
+	r.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusInternalServerError, w.Code)
+
+	mockUsecase.AssertExpectations(t)
 }

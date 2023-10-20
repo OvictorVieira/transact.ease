@@ -53,6 +53,15 @@ func (a accountUsecase) Create(ctx context.Context, inAccount *Domain.AccountDto
 }
 
 func (a accountUsecase) GetById(ctx context.Context, inAccount *Domain.AccountDto) (outAccount Domain.AccountDto, statusCode int, err error) {
-	//TODO implement me
-	panic("implement me")
+	LOGGER.InfoF("trying to get an account by id: ", logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow}, inAccount.ID)
+
+	outAccount, err = a.repo.GetById(ctx, inAccount)
+	if err != nil {
+		LOGGER.Error("error when try to find account with id provided", logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
+		return Domain.AccountDto{}, http.StatusNotFound, constants.ErrAccountNotFound
+	}
+
+	LOGGER.Info("account found", logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
+
+	return outAccount, http.StatusOK, nil
 }

@@ -2,26 +2,25 @@ package accounts
 
 import (
 	"context"
-	"github.com/jmoiron/sqlx"
+	"github.com/OvictorVieira/transact.ease/internal/domains/accounts"
 	"github.com/stretchr/testify/mock"
 )
 
-type MockDatabase struct {
+type MockAccountRepository struct {
 	mock.Mock
 }
 
-func (m *MockDatabase) NamedQueryContext(ctx context.Context, query string, arg interface{}) (*sqlx.Rows, error) {
-	args := m.Called(ctx, query, arg)
-	return args.Get(0).(*sqlx.Rows), args.Error(1)
+func (m *MockAccountRepository) Create(ctx context.Context, inAccount *accounts.AccountDto) error {
+	args := m.Called(ctx, inAccount)
+	return args.Error(0)
 }
 
-func (m *MockDatabase) GetContext(ctx context.Context, dest interface{}, query string, args ...interface{}) error {
-	argList := make([]interface{}, len(args)+3)
-	argList[0] = ctx
-	argList[1] = dest
-	argList[2] = query
-	copy(argList[3:], args)
-	args = m.Called(argList...)
+func (m *MockAccountRepository) GetByDocumentNumber(ctx context.Context, inAccount *accounts.AccountDto) (accounts.AccountDto, error) {
+	args := m.Called(ctx, inAccount)
+	return args.Get(0).(accounts.AccountDto), args.Error(1)
+}
 
-	return nil
+func (m *MockAccountRepository) GetById(ctx context.Context, inAccount *accounts.AccountDto) (outAccount accounts.AccountDto, err error) {
+	args := m.Called(ctx, inAccount)
+	return args.Get(0).(accounts.AccountDto), args.Error(1)
 }

@@ -10,8 +10,9 @@ type accountRepository struct {
 }
 
 const (
-	InsertNewAccountQuery = `INSERT INTO transact_ease.accounts(document_number, created_at, updated_at) VALUES (:document_number, :created_at, :updated_at)`
-	GetByIdQuery          = `SELECT * FROM transact_ease.accounts WHERE "document_number" = $1`
+	InsertNewAccountQuery    = `INSERT INTO transact_ease.accounts(document_number, created_at, updated_at) VALUES (:document_number, :created_at, :updated_at)`
+	GetByDocumentNumberQuery = `SELECT * FROM transact_ease.accounts WHERE "document_number" = $1`
+	GetByAccountIdQuery      = `SELECT * FROM transact_ease.accounts WHERE "account_id" = $1`
 )
 
 func NewAccountRepository(conn Database) Domain.AccountRepository {
@@ -34,7 +35,18 @@ func (a accountRepository) Create(ctx context.Context, inAccount *Domain.Account
 func (a accountRepository) GetByDocumentNumber(ctx context.Context, inAccount *Domain.AccountDto) (outAccount Domain.AccountDto, err error) {
 	accountRecord := Domain.FromAccountDto(inAccount)
 
-	err = a.conn.GetContext(ctx, &accountRecord, GetByIdQuery, accountRecord.DocumentNumber)
+	err = a.conn.GetContext(ctx, &accountRecord, GetByDocumentNumberQuery, accountRecord.DocumentNumber)
+	if err != nil {
+		return Domain.AccountDto{}, err
+	}
+
+	return accountRecord.ToAccountDto(), nil
+}
+
+func (a accountRepository) GetById(ctx context.Context, inAccount *Domain.AccountDto) (outAccount Domain.AccountDto, err error) {
+	accountRecord := Domain.FromAccountDto(inAccount)
+
+	err = a.conn.GetContext(ctx, &accountRecord, GetByAccountIdQuery, accountRecord.AccountId)
 	if err != nil {
 		return Domain.AccountDto{}, err
 	}

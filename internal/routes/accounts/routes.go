@@ -30,5 +30,6 @@ func (ar *AccountRoutes) Routes() {
 	{
 		router := ar.router.Group("/accounts")
 		router.POST("/", ar.Controller.ProcessAccountCreation)
+		router.GET("/:accountId", ar.Controller.GetById)
 	}
 }
