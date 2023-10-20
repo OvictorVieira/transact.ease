@@ -3,11 +3,10 @@ package repositories
 import (
 	"context"
 	Domain "github.com/OvictorVieira/transact.ease/internal/domains/accounts"
-	"github.com/jmoiron/sqlx"
 )
 
 type accountRepository struct {
-	conn *sqlx.DB
+	conn Database
 }
 
 const (
@@ -15,7 +14,7 @@ const (
 	GetByIdQuery          = `SELECT * FROM transact_ease.accounts WHERE "document_number" = $1`
 )
 
-func NewAccountRepository(conn *sqlx.DB) Domain.AccountRepository {
+func NewAccountRepository(conn Database) Domain.AccountRepository {
 	return &accountRepository{
 		conn: conn,
 	}
