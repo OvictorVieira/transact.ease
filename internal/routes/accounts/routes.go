@@ -15,12 +15,12 @@ type AccountRoutes struct {
 }
 
 func NewAccountsRoute(router *gin.RouterGroup, db *sqlx.DB) *AccountRoutes {
-	UserRepository := Repository.NewAccountRepository(db)
-	UserService := Usecase.NewUserService(UserRepository)
-	UserController := Controller.NewAccountController(UserService)
+	accountRepository := Repository.NewAccountRepository(db)
+	accountUsecase := Usecase.NewAccountUsecase(accountRepository)
+	accountController := Controller.NewAccountController(accountUsecase)
 
 	return &AccountRoutes{
-		Controller: UserController,
+		Controller: accountController,
 		router:     router,
 		db:         db,
 	}

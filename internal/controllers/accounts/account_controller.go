@@ -23,19 +23,19 @@ func NewAccountController(usecase Domain.AccountUsecase) AccountController {
 }
 
 func (ac AccountController) ProcessAccountCreation(ctx *gin.Context) {
-	var AccountCreationRequest Request.AccountCreationRequest
+	var accountCreationRequest Request.AccountCreationRequest
 
-	if err := ctx.ShouldBindJSON(&AccountCreationRequest); err != nil {
+	if err := ctx.ShouldBindJSON(&accountCreationRequest); err != nil {
 		Controllers.NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	if err := validators.ValidatePayloads(AccountCreationRequest); err != nil {
+	if err := validators.ValidatePayloads(accountCreationRequest); err != nil {
 		Controllers.NewErrorResponse(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	accountDto, statusCode, err := ac.usecase.Create(ctx.Request.Context(), AccountCreationRequest.ToAccountDto())
+	accountDto, statusCode, err := ac.usecase.Create(ctx.Request.Context(), accountCreationRequest.ToAccountDto())
 	if err != nil {
 		Controllers.NewErrorResponse(ctx, statusCode, err.Error())
 		return

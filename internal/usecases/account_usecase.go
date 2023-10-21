@@ -15,7 +15,7 @@ type accountUsecase struct {
 	repo Domain.AccountRepository
 }
 
-func NewUserService(repo Domain.AccountRepository) Domain.AccountUsecase {
+func NewAccountUsecase(repo Domain.AccountRepository) Domain.AccountUsecase {
 	return &accountUsecase{
 		repo: repo,
 	}

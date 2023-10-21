@@ -14,7 +14,7 @@ import (
 
 func TestCreateWithSuccess(t *testing.T) {
 	mockRepo := new(Mocks.MockAccountRepository)
-	usecase := NewUserService(mockRepo)
+	usecase := NewAccountUsecase(mockRepo)
 
 	accountDto := &accounts.AccountDto{
 		DocumentNumber: "123456789",
@@ -34,7 +34,7 @@ func TestCreateWithSuccess(t *testing.T) {
 
 func TestCreateFailsWithDuplicatedKey(t *testing.T) {
 	mockRepo := new(Mocks.MockAccountRepository)
-	usecase := NewUserService(mockRepo)
+	usecase := NewAccountUsecase(mockRepo)
 
 	accountDto := &accounts.AccountDto{
 		DocumentNumber: "123456789",
@@ -52,7 +52,7 @@ func TestCreateFailsWithDuplicatedKey(t *testing.T) {
 
 func TestCreateFailsWithGenericError(t *testing.T) {
 	mockRepo := new(Mocks.MockAccountRepository)
-	usecase := NewUserService(mockRepo)
+	usecase := NewAccountUsecase(mockRepo)
 
 	accountDto := &accounts.AccountDto{
 		DocumentNumber: "123456789",
@@ -70,7 +70,7 @@ func TestCreateFailsWithGenericError(t *testing.T) {
 
 func TestGetByIdWithSuccess(t *testing.T) {
 	mockRepo := new(Mocks.MockAccountRepository)
-	usecase := NewUserService(mockRepo)
+	usecase := NewAccountUsecase(mockRepo)
 
 	accountDto := &accounts.AccountDto{
 		ID: 1,
@@ -88,7 +88,7 @@ func TestGetByIdWithSuccess(t *testing.T) {
 
 func TestCreateFailsWithNotFound(t *testing.T) {
 	mockRepo := new(Mocks.MockAccountRepository)
-	usecase := NewUserService(mockRepo)
+	usecase := NewAccountUsecase(mockRepo)
 
 	accountDto := &accounts.AccountDto{
 		ID: -1,
