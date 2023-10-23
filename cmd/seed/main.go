@@ -47,7 +47,7 @@ func seed(db *sqlx.DB) (err error) {
 		return err
 	}
 
-	files, err := filepath.Glob(filepath.Join(cwd, dir, fmt.Sprintf("*.sql")))
+	files, err := filepath.Glob(filepath.Join(cwd, dir, "*.sql"))
 	if err != nil {
 		return constants.ErrWhenGetFiles
 	}
