@@ -2,6 +2,7 @@ package mocks
 
 import (
 	"context"
+	"database/sql"
 	"github.com/jmoiron/sqlx"
 	"github.com/stretchr/testify/mock"
 )
@@ -24,4 +25,9 @@ func (m *MockDatabase) GetContext(ctx context.Context, dest interface{}, query s
 	args = m.Called(argList...)
 
 	return nil
+}
+
+func (m *MockDatabase) Begin() (*sql.Tx, error) {
+	args := m.Called()
+	return args.Get(0).(*sql.Tx), args.Error(1)
 }
