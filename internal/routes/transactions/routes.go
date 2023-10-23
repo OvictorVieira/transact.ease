@@ -28,7 +28,7 @@ func NewTransactionsRoute(router *gin.RouterGroup, db *sqlx.DB) *TransactionRout
 
 func (ar *TransactionRoutes) Routes() {
 	{
-		router := ar.router.Group("/accounts")
+		router := ar.router.Group("/transactions")
 		router.POST("/", ar.Controller.ProcessTransactionCreation)
 	}
 }

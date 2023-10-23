@@ -2,11 +2,12 @@ package repositories
 
 import (
 	"context"
+	"github.com/OvictorVieira/transact.ease/internal/domains"
 	Domain "github.com/OvictorVieira/transact.ease/internal/domains/accounts"
 )
 
 type accountRepository struct {
-	conn Database
+	conn domains.Database
 }
 
 const (
@@ -15,7 +16,7 @@ const (
 	GetByAccountIdQuery      = `SELECT * FROM transact_ease.accounts WHERE "account_id" = $1`
 )
 
-func NewAccountRepository(conn Database) Domain.AccountRepository {
+func NewAccountRepository(conn domains.Database) Domain.AccountRepository {
 	return &accountRepository{
 		conn: conn,
 	}
