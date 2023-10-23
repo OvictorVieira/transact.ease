@@ -28,7 +28,7 @@ func ValidatePayloads(payload interface{}) (err error) {
 		for _, e := range err.(validator.ValidationErrors) {
 			field = e.Field()
 			tag = e.Tag()
-			value = e.Value().(string)
+			value = fmt.Sprintf("%v", e.Value())
 			param = e.Param()
 
 			if helpers.IsArrayContains(needParam, tag) {
