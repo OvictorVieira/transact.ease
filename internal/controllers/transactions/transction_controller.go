@@ -34,7 +34,7 @@ func (ac TransactionController) ProcessTransactionCreation(ctx *gin.Context) {
 		return
 	}
 
-	transactionDto, statusCode, err := ac.usecase.Create(ctx.Request.Context(), transactionCreationRequest.ToTransactionDto())
+	transactionDto, statusCode, err := ac.usecase.Create(transactionCreationRequest.ToTransactionDto())
 	if err != nil {
 		Controllers.NewErrorResponse(ctx, statusCode, err.Error())
 		return

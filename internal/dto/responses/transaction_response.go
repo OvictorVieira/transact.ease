@@ -14,7 +14,7 @@ func (ar *TransactionResponse) ToTransactionDto() Domain.TransactionDto {
 	}
 }
 
-func FromTransactionDto(ad Domain.TransactionDto) TransactionResponse {
+func FromTransactionDto(ad *Domain.TransactionDto) TransactionResponse {
 	return TransactionResponse{
 		Id: ad.ID,
 	}

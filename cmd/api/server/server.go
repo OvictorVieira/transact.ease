@@ -8,6 +8,7 @@ import (
 	"github.com/OvictorVieira/transact.ease/internal/constants"
 	"github.com/OvictorVieira/transact.ease/internal/routes"
 	AccountRoutes "github.com/OvictorVieira/transact.ease/internal/routes/accounts"
+	TransactionRoutes "github.com/OvictorVieira/transact.ease/internal/routes/transactions"
 	"github.com/OvictorVieira/transact.ease/pkg/logger"
 	"github.com/sirupsen/logrus"
 	"log"
@@ -35,6 +36,7 @@ func NewApp() (*App, error) {
 	// API Routes
 	api := router.Group("api")
 	AccountRoutes.NewAccountsRoute(api, conn).Routes()
+	TransactionRoutes.NewTransactionsRoute(api, conn).Routes()
 
 	// setup http server
 	server := &http.Server{

@@ -26,7 +26,7 @@ func TestFromTransactionDto(t *testing.T) {
 		ID: 1,
 	}
 
-	output := FromTransactionDto(input)
+	output := FromTransactionDto(&input)
 
 	expected := TransactionResponse{
 		Id: 1,
