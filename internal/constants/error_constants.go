@@ -13,4 +13,7 @@ var (
 	ErrAccountNotFound          = errors.New("account not found")
 	ErrCreateAccount            = errors.New("error when try to create account")
 	ErrDuplicatedDocumentNumber = errors.New("error when trying to create account with document number provided")
+
+	ErrTransactionNotFound = errors.New("transaction not found")
+	ErrCreatetransaction   = errors.New("error when try to create a transaction")
 )
