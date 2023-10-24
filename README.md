@@ -35,141 +35,34 @@ Ensure you have Docker and Docker Compose installed. If not, follow the installa
 
 Below is the directory structure of the Transact Ease API:
 
-```
-├── cmd
-│   ├── api
-│   │   ├── main.go
-│   │   └── server
-│   │       └── server.go
-│   ├── helpers
-│   │   └── common_helper.go
-│   ├── migration
-│   │   ├── main.go
-│   │   └── migrations
-│   │       ├── 1_create_accounts_table.up.sql
-│   │       ├── 1_drop_accounts_table.down.sql
-│   │       ├── 2_create_operations_types_table.up.sql
-│   │       ├── 2_drop_operations_types_table.down.sql
-│   │       ├── 3_create_transactions_table.up.sql
-│   │       ├── 3_drop_transactions_table.down.sql
-│   │       ├── 4_create_index_to_transaction_account_query.up.sql
-│   │       └── 4_drop_index_to_transaction_account_query.down.sql
-│   └── seed
-│       ├── main.go
-│       └── seeds
-│           ├── 1_seed_accounts.sql
-│           ├── 2_seed_operations_types.sql
-│           └── 3_seed_transactions.sql
-├── go.mod
-├── go.sum
-├── infra
-│   └── local
-│       ├── docker-compose.yaml
-│       ├── init.sql
-│       └── postgres
-│           └── data
-│               ├── PG_VERSION
-│               ├── base
-│               ├── global
-│               ├── pg_commit_ts
-│               ├── pg_dynshmem
-│               ├── pg_hba.conf
-│               ├── pg_ident.conf
-│               ├── pg_logical
-│               ├── pg_multixact
-│               ├── pg_notify
-│               ├── pg_replslot
-│               ├── pg_serial
-│               ├── pg_snapshots
-│               ├── pg_stat
-│               ├── pg_stat_tmp
-│               ├── pg_subtrans
-│               ├── pg_tblspc
-│               ├── pg_twophase
-│               ├── pg_wal
-│               ├── pg_xact
-│               ├── postgresql.auto.conf
-│               ├── postgresql.conf
-│               ├── postmaster.opts
-│               └── postmaster.pid
-├── internal
-│   ├── config
-│   │   ├── config.go
-│   │   ├── setup_postgre_config.go
-│   │   └── sqlx_driver.go
-│   ├── constants
-│   │   ├── env_constants.go
-│   │   ├── error_constants.go
-│   │   ├── logger_constants.go
-│   │   ├── success_constants.go
-│   │   └── time_constants.go
-│   ├── controllers
-│   │   ├── accounts
-│   │   │   ├── account_controller.go
-│   │   │   └── account_controller_test.go
-│   │   ├── base_response.go
-│   │   ├── base_response_test.go
-│   │   └── transactions
-│   │       ├── transaction_controller_test.go
-│   │       └── transction_controller.go
-│   ├── domains
-│   │   ├── accounts
-│   │   │   ├── account.go
-│   │   │   ├── account_interface.go
-│   │   │   └── account_mapper.go
-│   │   ├── database_interface.go
-│   │   └── transactions
-│   │       ├── transaction.go
-│   │       ├── transaction_interface.go
-│   │       └── transaction_mapper.go
-│   ├── dto
-│   │   ├── requests
-│   │   │   ├── account_request.go
-│   │   │   ├── account_request_test.go
-│   │   │   ├── transaction_request.go
-│   │   │   └── transaction_request_test.go
-│   │   └── responses
-│   │       ├── account_response.go
-│   │       ├── account_response_test.go
-│   │       ├── transaction_response.go
-│   │       └── transaction_response_test.go
-│   ├── integrations
-│   ├── mocks
-│   │   ├── accounts
-│   │   │   ├── account_repository.go
-│   │   │   └── account_usecase.go
-│   │   ├── mock_database.go
-│   │   └── transactions
-│   │       └── transaction_usecase.go
-│   ├── repositories
-│   │   ├── account_repository.go
-│   │   ├── account_repository_test.go
-│   │   └── transaction_repository.go
-│   ├── routes
-│   │   ├── accounts
-│   │   │   └── routes.go
-│   │   ├── router.go
-│   │   └── transactions
-│   │       └── routes.go
-│   └── usecases
-│       ├── account_usecase.go
-│       ├── account_usecase_test.go
-│       └── transaction_usecase.go
-├── makefile
-├── pkg
-│   ├── helpers
-│   │   ├── utils_helper.go
-│   │   └── utils_helper_test.go
-│   ├── logger
-│   │   ├── log_logger.go
-│   │   └── logrus_logger.go
-│   └── validators
-│       ├── payload_validator.go
-│       └── payload_validator_test.go
-└── scripts
-```
+1. **cmd:**
+    - **api:** Contains the entry point (`main.go`) and server setup (`server.go`) for your application.
+    - **helpers:** Houses common helper function(s) (`common_helper.go`) that could be used across different parts of your application.
+    - **migration:** Manages database migrations with SQL scripts for creating, indexing, and dropping tables, and a `main.go` for executing these migrations.
+    - **seed:** Holds SQL seeding scripts along with a `main.go` file to manage the seeding process.
 
-This structure provides an organized view of the main components of the application.
+2. **infra:**
+    - **local:** Contains Docker Compose and initial SQL setup for local development, as well as the data directory for your Postgres database.
+
+3. **internal:**
+    - **config:** Encapsulates configuration loading and database setup.
+    - **constants:** Defines various constant values used across your application.
+    - **controllers:** Contains controller logic for handling HTTP requests and responses.
+    - **domains:** Holds domain models, interfaces, and mappers for managing data and business logic.
+    - **dto (Data Transfer Objects):** Contains request and response structures for handling data transfer between layers.
+    - **mocks:** Houses mock implementations for testing purposes.
+    - **repositories:** Encapsulates data access logic.
+    - **routes:** Manages routing of HTTP requests to the appropriate handlers.
+    - **usecases:** Contains use case implementations which orchestrate the flow of data to and from the entities.
+
+4. **pkg:**
+    - **helpers:** Contains utility helper function(s).
+    - **logger:** Manages logging across your application.
+    - **validators:** Manages payload validation.
+
+5. **scripts:** This directory could be used for storing various script files that assist in development, build or deployment processes.
+
+This structure adheres to a clean architecture, separating concerns into different layers and following a logical structure that groups related functionalities together. Each directory serves a clear purpose, aiding in maintaining a clean and well-organized codebase.
 
 ## Postman Documentation
 
