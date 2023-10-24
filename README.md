@@ -82,8 +82,6 @@ To access the documentation click [here](https://documenter.getpostman.com/view/
 
 To test the API endpoints, you can use the provided Postman collection. [Download the collection here](https://github.com/OvictorVieira/transact.ease/files/13126655/API.Documentation.postman_collection.json) and import it into your Postman application.
 
-
-
 To the **local** environment use [localhost:8080](http://localhost:3000) as the `url` variable value.
 
 To the **production** environment use [https://transact-ease-605ea8e7ab48.herokuapp.com/](https://transact-ease-605ea8e7ab48.herokuapp.com/) as the `url` variable value.
@@ -162,7 +160,10 @@ At Transact Ease API, we prioritize the quality and reliability of our codebase.
 
 ### Checking Test Coverage
 
-- **Running Tests:** Use `make run-tests-with-cover` to run the tests with coverage.
+- **Running tests with coverage:** 
+   ```bash
+   make run-tests-with-cover
+   ```
 
 ## Release and Deployment
 
