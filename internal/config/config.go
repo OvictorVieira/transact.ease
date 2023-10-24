@@ -6,6 +6,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"os"
+	"reflect"
+	"strings"
 )
 
 var AppConfig Config
@@ -20,9 +22,26 @@ type Config struct {
 	DBPostgreURL    string `mapstructure:"DATABASE_URL"`
 }
 
-func InitializeAppConfig() error {
-	viper.AutomaticEnv()
+func BindEnvs(iface interface{}, parts ...string) {
+	ifv := reflect.ValueOf(iface)
+	ift := reflect.TypeOf(iface)
+	for i := 0; i < ift.NumField(); i++ {
+		v := ifv.Field(i)
+		t := ift.Field(i)
+		tv, ok := t.Tag.Lookup("mapstructure")
+		if !ok {
+			continue
+		}
+		switch v.Kind() {
+		case reflect.Struct:
+			BindEnvs(v.Interface(), append(parts, tv)...)
+		default:
+			viper.BindEnv(strings.Join(append(parts, tv), "."))
+		}
+	}
+}
 
+func InitializeAppConfig() error {
 	if _, local := os.LookupEnv("LOCAL"); local {
 		viper.SetConfigName(".env")
 		viper.SetConfigType("env")
@@ -31,16 +50,13 @@ func InitializeAppConfig() error {
 		viper.AddConfigPath("internal/config")
 		viper.AddConfigPath("/")
 		viper.AllowEmptyEnv(true)
-	} else {
-		LOGGER.InfoF("binding environment variables", logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
-		viper.BindEnv("PORT")
-		viper.BindEnv("ENVIRONMENT")
-		viper.BindEnv("DATABASE_URL")
-	}
 
-	if err := viper.ReadInConfig(); err != nil {
-		LOGGER.Error("error when try to load configs: "+err.Error(), logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
-		return constants.ErrLoadConfig
+		if err := viper.ReadInConfig(); err != nil {
+			LOGGER.Error("error when try to load configs: "+err.Error(), logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
+			return constants.ErrLoadConfig
+		}
+	} else {
+		BindEnvs(AppConfig)
 	}
 
 	if err := viper.Unmarshal(&AppConfig); err != nil {
