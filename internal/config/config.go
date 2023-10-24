@@ -5,6 +5,7 @@ import (
 	LOGGER "github.com/OvictorVieira/transact.ease/pkg/logger"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"os"
 )
 
 var AppConfig Config
@@ -20,23 +21,29 @@ type Config struct {
 }
 
 func InitializeAppConfig() error {
+	// AutomaticEnv tells Viper to check environment variables
+	// for all the keys as it tries to find values for your config struct.
 	viper.AutomaticEnv()
 
-	viper.SetConfigName(".env")
-	viper.SetConfigType("env")
-	viper.AddConfigPath(".")
-	viper.AddConfigPath("../config")
-	viper.AddConfigPath("/")
-	viper.AllowEmptyEnv(true)
+	// Optionally you can also set a prefix for environment variables
+	// viper.SetEnvPrefix("APP")
 
-	//err := viper.ReadInConfig()
-	//if err != nil {
-	//	LOGGER.Error("error when try to load configs: "+err.Error(), logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
-	//	return constants.ErrLoadConfig
-	//}
+	// If running locally, attempt to load the configuration from a file.
+	if _, local := os.LookupEnv("LOCAL"); local {
+		viper.SetConfigName(".env")
+		viper.SetConfigType("env")
+		viper.AddConfigPath(".")
+		viper.AddConfigPath("../config")
+		viper.AddConfigPath("/")
+		viper.AllowEmptyEnv(true)
 
-	err := viper.Unmarshal(&AppConfig)
-	if err != nil {
+		if err := viper.ReadInConfig(); err != nil {
+			LOGGER.Error("error when try to load configs: "+err.Error(), logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
+			return constants.ErrLoadConfig
+		}
+	}
+
+	if err := viper.Unmarshal(&AppConfig); err != nil {
 		return constants.ErrParseConfig
 	}
 
