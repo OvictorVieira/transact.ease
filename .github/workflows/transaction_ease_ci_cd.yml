@@ -66,4 +66,3 @@ jobs:
           usedocker: true
           dockerfile_directory: ./
           dockerfile_name: Dockerfile
-          dockerfile_args: --build-arg ENVIRONMENT=${{ secrets.ENVIRONMENT }} DB_POSTGRE_URL=${{ secrets.DB_POSTGRE_URL }}
