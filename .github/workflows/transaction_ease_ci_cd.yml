@@ -1,0 +1,60 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  Checks:
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: './go.mod'
+      - name: Check Formatting
+        run: go fmt ./...
+      - name: Vet Project
+        run: go vet ./...
+      - name: Initialise StaticCheck
+        run: go get honnef.co/go/tools/cmd/staticcheck@latest && go install honnef.co/go/tools/cmd/staticcheck@latest
+      - name: StaticCheck - Check for unused functions, duplicate imports + more
+        run: staticcheck ./...
+      - name: Initialise DeadCode
+        run: go get github.com/remyoudompheng/go-misc/deadcode && go install github.com/remyoudompheng/go-misc/deadcode
+      - name: DeadCode - Check for unused variables
+        run: deadcode -test
+      - name: Initialise ErrCheck
+        run: go get github.com/kisielk/errcheck@latest && go install github.com/kisielk/errcheck@latest
+  UnitTest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: './go.mod'
+      - name: Run Unit Tests
+        run: go test -v -race -covermode=atomic ./...
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+          usedocker: true
+          dockerfile_directory: ./infra/heroku/
+          dockerfile_name: Dockerfile
