@@ -30,7 +30,7 @@ func (t transactionUsecase) Create(inTransaction *Domain.TransactionDto) (ouTran
 		LOGGER.Error("error when try to create a transaction", logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
 
 		LOGGER.Error(err.Error(), logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
-		return &Domain.TransactionDto{}, http.StatusInternalServerError, constants.ErrCreatetransaction
+		return &Domain.TransactionDto{}, http.StatusInternalServerError, constants.ErrCreateTransaction
 	}
 
 	inTransaction.ID = createdTransactionId
