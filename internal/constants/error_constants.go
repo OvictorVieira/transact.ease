@@ -14,6 +14,5 @@ var (
 	ErrCreateAccount            = errors.New("error when try to create account")
 	ErrDuplicatedDocumentNumber = errors.New("error when trying to create account with document number provided")
 
-	ErrTransactionNotFound = errors.New("transaction not found")
-	ErrCreatetransaction   = errors.New("error when try to create a transaction")
+	ErrCreateTransaction = errors.New("error when try to create a transaction")
 )
