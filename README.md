@@ -23,7 +23,17 @@ The live application is deployed on [Heroku](https://www.heroku.com/) and can be
 
 ## Prerequisites
 
-To run local, you will need to create an `.env` file on `internal/config`. Take the example and populate it.
+To run local:
+
+1. **Export the `LOCAL` environment variable:**
+   ```bash
+   export LOCAL=LOCAL
+   ```
+
+1. **Create an `.env` file on `internal/config`:**
+   ```bash
+   cp internal/config/.env.example internal/config/.env
+   ```
 
 ### Docker
 
