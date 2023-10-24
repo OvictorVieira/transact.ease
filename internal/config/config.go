@@ -21,33 +21,32 @@ type Config struct {
 }
 
 func InitializeAppConfig() error {
-	// AutomaticEnv tells Viper to check environment variables
-	// for all the keys as it tries to find values for your config struct.
 	viper.AutomaticEnv()
 
-	// Optionally you can also set a prefix for environment variables
-	// viper.SetEnvPrefix("APP")
-
-	// If running locally, attempt to load the configuration from a file.
 	if _, local := os.LookupEnv("LOCAL"); local {
 		viper.SetConfigName(".env")
 		viper.SetConfigType("env")
 		viper.AddConfigPath(".")
 		viper.AddConfigPath("../config")
+		viper.AddConfigPath("internal/config")
 		viper.AddConfigPath("/")
 		viper.AllowEmptyEnv(true)
+	} else {
+		LOGGER.InfoF("binding environment variables", logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
+		viper.BindEnv("PORT")
+		viper.BindEnv("ENVIRONMENT")
+		viper.BindEnv("DATABASE_URL")
+	}
 
-		if err := viper.ReadInConfig(); err != nil {
-			LOGGER.Error("error when try to load configs: "+err.Error(), logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
-			return constants.ErrLoadConfig
-		}
+	if err := viper.ReadInConfig(); err != nil {
+		LOGGER.Error("error when try to load configs: "+err.Error(), logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
+		return constants.ErrLoadConfig
 	}
 
 	if err := viper.Unmarshal(&AppConfig); err != nil {
+		LOGGER.Error("error when try to unmarshall configs: "+err.Error(), logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
 		return constants.ErrParseConfig
 	}
-
-	LOGGER.Info("configs env: "+AppConfig.Environment, logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
 
 	if AppConfig.Port == 0 || AppConfig.Environment == "" || AppConfig.DBPostgreDriver == "" {
 		return constants.ErrEmptyVar
