@@ -2,6 +2,8 @@ package config
 
 import (
 	"github.com/OvictorVieira/transact.ease/internal/constants"
+	LOGGER "github.com/OvictorVieira/transact.ease/pkg/logger"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
@@ -30,6 +32,7 @@ func InitializeAppConfig() error {
 
 	err := viper.ReadInConfig()
 	if err != nil {
+		LOGGER.Error("error when try to load configs: "+err.Error(), logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
 		return constants.ErrLoadConfig
 	}
 

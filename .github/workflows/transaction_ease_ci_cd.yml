@@ -64,5 +64,6 @@ jobs:
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           usedocker: true
-          dockerfile_directory: ./infra/heroku/
+          dockerfile_directory: ./
           dockerfile_name: Dockerfile
+          dockerfile_args: --build-arg ENVIRONMENT=${{ secrets.ENVIRONMENT }} DB_POSTGRE_URL=${{ secrets.DB_POSTGRE_URL }}
