@@ -15,3 +15,6 @@ run-tests:
 
 run-tests-with-cover:
 	go test --cover ./...
+
+run-server:
+	go run cmd/api/main.go
