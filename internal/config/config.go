@@ -14,34 +14,34 @@ type Config struct {
 	Environment string `mapstructure:"ENVIRONMENT"`
 	Debug       bool   `mapstructure:"DEBUG"`
 
-	DBPostgreDriver  string `mapstructure:"DB_POSTGRE_DRIVER"`
-	DBPostgreDsn     string `mapstructure:"DB_POSTGRE_DSN"`
-	DBPostgreURL     string `mapstructure:"DB_POSTGRE_URL"`
-	DBPostgreDsnTest string `mapstructure:"DB_POSTGRE_DSN_TEST"`
+	DBPostgreDriver string `mapstructure:"DB_POSTGRE_DRIVER"`
+	DBPostgreDsn    string `mapstructure:"DB_POSTGRE_DSN"`
+	DBPostgreURL    string `mapstructure:"DATABASE_URL"`
 }
 
 func InitializeAppConfig() error {
-	viper.SetConfigName(".env") // allow directly reading from .env file
+	viper.AutomaticEnv()
+
+	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(".")
 	viper.AddConfigPath("../config")
-	viper.AddConfigPath("internal/config")
 	viper.AddConfigPath("/")
 	viper.AllowEmptyEnv(true)
-	viper.AutomaticEnv()
 
-	err := viper.ReadInConfig()
-	if err != nil {
-		LOGGER.Error("error when try to load configs: "+err.Error(), logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
-		return constants.ErrLoadConfig
-	}
+	//err := viper.ReadInConfig()
+	//if err != nil {
+	//	LOGGER.Error("error when try to load configs: "+err.Error(), logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
+	//	return constants.ErrLoadConfig
+	//}
 
-	err = viper.Unmarshal(&AppConfig)
+	err := viper.Unmarshal(&AppConfig)
 	if err != nil {
 		return constants.ErrParseConfig
 	}
 
-	// check
+	LOGGER.Info("configs env: "+AppConfig.Environment, logrus.Fields{constants.LoggerCategory: constants.LoggerCategorySystemFlow})
+
 	if AppConfig.Port == 0 || AppConfig.Environment == "" || AppConfig.DBPostgreDriver == "" {
 		return constants.ErrEmptyVar
 	}
